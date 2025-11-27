@@ -1,0 +1,23 @@
+name: Run ISS Tracker
+
+on:
+  workflow_dispatch:   # This allows you to run the workflow manually
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run the ISS Tracker script
+        run: python main.py
