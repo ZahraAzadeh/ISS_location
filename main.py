@@ -1,24 +1,27 @@
 import requests
 
-ISS_API_URL = "http://api.open-notify.org/iss-now.json"
+ISS_API_URL = "https://api.wheretheiss.at/v1/satellites/25544"
 ASTRONAUTS_API_URL = "http://api.open-notify.org/astros.json"
 
 
 def get_iss_location():
     """Fetch and display the current ISS location."""
     try:
-        response = requests.get(ISS_API_URL)
+        response = requests.get(ISS_API_URL, timeout=10)
         data = response.json()
 
-        latitude = data["iss_position"]["latitude"]
-        longitude = data["iss_position"]["longitude"]
+        latitude = data["latitude"]
+        longitude = data["longitude"]
 
         print("\n=== Current ISS Location ===")
         print(f"Latitude:  {latitude}")
         print(f"Longitude: {longitude}")
 
         # OpenStreetMap link
-        map_link = f"https://www.openstreetmap.org/?mlat={latitude}&mlon={longitude}#map=5/{latitude}/{longitude}"
+        map_link = (
+            f"https://www.openstreetmap.org/?mlat={latitude}&mlon={longitude}"
+            f"#map=5/{latitude}/{longitude}"
+        )
         print(f"\nMap Link: {map_link}")
 
     except Exception as e:
@@ -28,7 +31,7 @@ def get_iss_location():
 def get_astronauts():
     """Fetch and display the astronauts currently in space."""
     try:
-        response = requests.get(ASTRONAUTS_API_URL)
+        response = requests.get(ASTRONAUTS_API_URL, timeout=10)
         data = response.json()
 
         number = data["number"]

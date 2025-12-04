@@ -1,7 +1,17 @@
 name: Run ISS Tracker
 
 on:
-  workflow_dispatch:   # This allows you to run the workflow manually
+  workflow_dispatch:
+    inputs:
+      option:
+        description: "Choose what to run"
+        required: true
+        default: "3"
+        type: choice
+        options:
+          - "1 - Show ISS Location"
+          - "2 - Show Astronauts"
+          - "3 - Run Both"
 
 jobs:
   run_script:
@@ -14,10 +24,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run the ISS Tracker script
-        run: python main.py
+      - name: Run selected option
+        run: |
+          echo "Selected: ${{ github.event.inputs.option }}"
+
+          if [[ "${{ github.event.inputs.option }}" == "1 - Show ISS Location" ]]; then
+            python main.py --option 1
+          elif [[ "${{ github.event.inputs.option }}" == "2 - Show Astronauts" ]]; then
+            python main.py --option 2
+          else
+            python main.py
+          fi
